@@ -1,0 +1,18 @@
+# Airflow runtime
+airflow.db
+airflow.cfg
+logs/
+__pycache__/
+*.pyc
+
+# Auth
+simple_auth_manager_passwords.json.generated
+
+# Virtual environments
+venv/
+.venv/
+airflow_venv/
+
+# OS
+.DS_Store
+Thumbs.db

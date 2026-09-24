@@ -1,0 +1,26 @@
+# Airflow
+airflow.db
+airflow.cfg
+logs/
+__pycache__/
+*.pyc
+
+# Airflow authentication
+simple_auth_manager_passwords.json.generated
+
+# Python virtual environment
+airflow_venv/
+.venv/
+venv/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.log
