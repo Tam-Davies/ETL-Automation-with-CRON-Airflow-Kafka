@@ -1,5 +1,5 @@
 import pandas as pd
-from ingestion import extract_multiple_seasons as ems
+from .ingestion import extract_multiple_seasons as ems
 
 
 def transform_match_data(df):

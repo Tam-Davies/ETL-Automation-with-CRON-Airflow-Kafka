@@ -2,8 +2,8 @@ import os
 from dotenv import load_dotenv
 import pandas as pd
 from sqlalchemy import create_engine
-from ingestion import extract_multiple_seasons as ems
-from transform import transform_match_data as td
+from .ingestion import extract_multiple_seasons as ems
+from .transform import transform_match_data as td
 
 load_dotenv()
 
