@@ -47,13 +47,12 @@ def extract_multiple_seasons(season_list):
     df = pd.DataFrame(all_parsed_matches)
     return df
 
-  # Convert the combined list into a single Pandas DataFrame
-  # df = pd.DataFrame(all_parsed_matches)
-  # return df
+  
 
 
-# # Run the extraction and inspect the combined dataset
-# df_matches = extract_multiple_seasons(seasons)
-# print(f"\nTotal matches extracted across all seasons: {len(df_matches)}")
-# print(df_matches.head())
+# Self test
+# if __name__ == "__main__":
+#   df = extract_multiple_seasons(seasons)
+#   print(df.info())
+
 
