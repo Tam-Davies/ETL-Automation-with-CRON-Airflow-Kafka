@@ -1,5 +1,5 @@
 import json
-from config import (
+from football_etl.kafka.config import (
     CONSUMER_GROUP_GRAFANA,
     KAFKA_BOOTSTRAP_SERVERS,
     KAFKA_TOPIC_MATCHES,

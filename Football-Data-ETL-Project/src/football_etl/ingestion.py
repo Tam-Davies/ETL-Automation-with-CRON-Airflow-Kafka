@@ -44,8 +44,9 @@ def extract_multiple_seasons(season_list):
 
     except requests.exceptions.HTTPError as e:
       print(f"Failed to fetch season {season}: {e}")
-    df = pd.DataFrame(all_parsed_matches)
-    return df
+  df = pd.DataFrame(all_parsed_matches)
+  
+  return df
 
   
 

@@ -1,5 +1,5 @@
 import json
-from config import (
+from football_etl.kafka.config import (
     CONSUMER_GROUP_POSTGRES,
     DB_HOST,
     DB_NAME,
@@ -9,12 +9,14 @@ from config import (
     KAFKA_BOOTSTRAP_SERVERS,
     KAFKA_TOPIC_MATCHES,
 )
+from football_etl.transform import (
+    transform_match_data as td,
+)  # Update path if transform.py is located elsewhere
 from kafka import KafkaConsumer
 import pandas as pd
 from sqlalchemy import create_engine
-from transform import transform_match_data as td
 
-# Creatind database
+# Create SQLAlchemy connection engine
 engine = create_engine(
     f"postgresql+psycopg2://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
 )
