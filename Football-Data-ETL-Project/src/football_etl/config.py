@@ -15,6 +15,7 @@ DB_NAME = os.getenv("DB_NAME")
 KAFKA_BOOTSTRAP_SERVERS = os.getenv("KAFKA_BOOTSTRAP_SERVERS")
 KAFKA_TOPIC_MATCHES = os.getenv("KAFKA_TOPIC_MATCHES")
 
-# Consumer Group IDs
-# CONSUMER_GROUP_POSTGRES = os.getenv("CONSUMER_GROUP_POSTGRES")
-# CONSUMER_GROUP_GRAFANA = os.getenv("CONSUMER_GROUP_GRAFANA")
+
+#  Delta / storage paths 
+BRONZE_PATH = os.getenv("BRONZE_PATH", "./data/bronze/matches")
+BRONZE_CHECKPOINT = os.getenv("BRONZE_CHECKPOINT", "./data/checkpoints/bronze_ingest")
