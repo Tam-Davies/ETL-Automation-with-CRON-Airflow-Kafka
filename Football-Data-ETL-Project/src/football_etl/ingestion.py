@@ -1,6 +1,5 @@
 import os
 from dotenv import load_dotenv
-import pandas as pd
 import requests
 
 load_dotenv()
@@ -12,8 +11,11 @@ headers = {"X-Auth-Token": api_key, "accept": "application/json"}
 seasons = [2023, 2024, 2025, 2026]
 
 
-def extract_multiple_seasons(season_list):
-  all_parsed_matches = []
+def fetch_raw_season_data(season_list):
+  """Fetches raw JSON payloads directly from the API for the given seasons
+
+  and returns them as a dictionary"""
+  raw_data_map = {}
 
   for season in season_list:
     params = {"season": season}
@@ -23,37 +25,17 @@ def extract_multiple_seasons(season_list):
       response = requests.get(url, headers=headers, params=params)
       response.raise_for_status()
 
-      data = response.json()
-      matches_list = data.get("matches", [])
-
-      for match in matches_list:
-        match_record = {
-            "season": season,
-            "match_id": match.get("id"),
-            "matchday": match.get("matchday"),
-            "date": match.get("utcDate"),
-            "status": match.get("status"),
-            "home_team": match.get("homeTeam", {}).get("name"),
-            "away_team": match.get("awayTeam", {}).get("name"),
-            "home_score": match.get("score", {}).get("fullTime", {}).get("home"),
-            "away_score": match.get("score", {}).get("fullTime", {}).get("away"),
-        }
-        all_parsed_matches.append(match_record)
-
-      print(f"Successfully extracted season {season}")
+      # Store the raw JSON dictionary for this season
+      raw_data_map[season] = response.json()
+      print(f"Successfully fetched raw JSON for season {season}")
 
     except requests.exceptions.HTTPError as e:
       print(f"Failed to fetch season {season}: {e}")
-  df = pd.DataFrame(all_parsed_matches)
-  
-  return df
 
-  
+  return raw_data_map
 
 
 # Self test
-# if __name__ == "__main__":
-#   df = extract_multiple_seasons(seasons)
-#   print(df.info())
-
-
+if __name__ == "__main__":
+  data = fetch_raw_season_data(seasons)
+  print(f"Ready to push {len(data)} season payloads to Kafka.")

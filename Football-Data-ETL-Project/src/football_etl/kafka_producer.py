@@ -1,7 +1,7 @@
 import json
 import time
 from kafka import KafkaProducer
-from football_etl.kafka.config import API_KEY_ACCESS, KAFKA_BOOTSTRAP_SERVERS, KAFKA_TOPIC_MATCHES
+from football_etl.config import API_KEY_ACCESS, KAFKA_BOOTSTRAP_SERVERS, KAFKA_TOPIC_MATCHES
 from football_etl.ingestion import extract_multiple_seasons as ems
 
 
@@ -17,7 +17,7 @@ def run_producer():
   )
 
   # Fetch matches using your API key and ingestion logic
-  df_matches = ems([2023, 2024, 2025])
+  df_matches = ems([2023, 2024, 2025, 2026])
   matches_list = df_matches.to_dict(orient="records")
 
   print(f"--- PRODUCER: Starting transmission of {len(matches_list)} matches ---")
