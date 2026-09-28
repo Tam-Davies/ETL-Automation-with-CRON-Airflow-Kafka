@@ -19,3 +19,15 @@ KAFKA_TOPIC_MATCHES = os.getenv("KAFKA_TOPIC_MATCHES")
 #  Delta / storage paths 
 BRONZE_PATH = os.getenv("BRONZE_PATH", "./data/bronze/matches")
 BRONZE_CHECKPOINT = os.getenv("BRONZE_CHECKPOINT", "./data/checkpoints/bronze_ingest")
+
+SILVER_CHECKPOINT = os.getenv("SILVER_CHECKPOINT", "./data/checkpoints/silver_transform")
+
+# --- Postgres settings ---
+PG_URL = os.getenv("PG_URL", "jdbc:postgresql://localhost:5432/matches")
+PG_PROPS = {
+    "user": os.getenv("PG_USER", "spark"),
+    "password": os.getenv("PG_PASSWORD", "spark_pw"),
+    "driver": "org.postgresql.Driver",
+}
+SILVER_TABLE = "silver.match_events"
+GOLD_TABLE = "gold.match_summary"

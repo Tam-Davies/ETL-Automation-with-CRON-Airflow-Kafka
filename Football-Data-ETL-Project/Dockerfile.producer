@@ -6,4 +6,4 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY src/football_etl ./football_etl
 
-CMD ["python", "-m", "football_etl.producer"]
+CMD ["python", "-m", "football_etl.kafka_producer"]

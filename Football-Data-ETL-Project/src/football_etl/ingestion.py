@@ -11,7 +11,7 @@ headers = {"X-Auth-Token": api_key, "accept": "application/json"}
 seasons = [2023, 2024, 2025, 2026]
 
 
-def fetch_raw_season_data(season_list):
+def extract_multiple_seasons(season_list):
   """Fetches raw JSON payloads directly from the API for the given seasons
 
   and returns them as a dictionary"""
@@ -37,5 +37,5 @@ def fetch_raw_season_data(season_list):
 
 # Self test
 if __name__ == "__main__":
-  data = fetch_raw_season_data(seasons)
+  data = extract_multiple_seasons(seasons)
   print(f"Ready to push {len(data)} season payloads to Kafka.")
