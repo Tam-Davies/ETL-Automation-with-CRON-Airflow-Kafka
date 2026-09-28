@@ -1,11 +1,10 @@
-version: "3.8"
-
 services:
   kafka:
     image: confluentinc/cp-kafka:7.6.0
     ports:
       - "9092:9092"
     environment:
+      CLUSTER_ID: 'Mk3OEYBSD3t9SlvVqQ4Z8Q'
       KAFKA_NODE_ID: 1
       KAFKA_PROCESS_ROLES: 'broker,controller'
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: 'CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT'
@@ -17,7 +16,6 @@ services:
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
       KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
-      CLUSTER_ID: 'Mk3OEYBSD3t9SlvVqQ4Z8Q'
     healthcheck:
       test: ["CMD", "python3", "-c", "import socket; s = socket.socket(); s.connect(('localhost', 9092))"]
       interval: 5s
@@ -79,6 +77,8 @@ services:
     environment:
       PYTHONPATH: /opt/src
       KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+    env_file:
+      - .env
     volumes:
       - ./src:/opt/src
     command: python -m football_etl.kafka_producer
