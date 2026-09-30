@@ -6,7 +6,7 @@ services:
     ports:
       - "9092:9092"
     environment:
-      CLUSTER_ID: 'Mk3OEYBSD3t9SlvVqQ4Z8Q'
+      CLUSTER_ID: 'Mk3OEYBSD3t9SlvVvQ4Z8Q'
       KAFKA_NODE_ID: 1
       KAFKA_PROCESS_ROLES: 'broker,controller'
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: 'CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT'
@@ -63,6 +63,7 @@ services:
     environment:
       - AIRFLOW__CORE__EXECUTOR=SequentialExecutor
       - AIRFLOW__DATABASE__SQL_ALCHEMY_CONN=postgresql+psycopg2://postgres:Kickboxing12#@postgres:5432/football_db
+      - AIRFLOW__WEBSERVER__WORKERS=2
     command: standalone
     volumes:
       - ./airflow/dags:/opt/airflow/dags
@@ -77,6 +78,10 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.producer
+    env_file:
+      - .env
+    environment:
+      KAFKA_BOOTSTRAP_SERVERS: kafka:9092
     depends_on:
       kafka:
         condition: service_healthy
