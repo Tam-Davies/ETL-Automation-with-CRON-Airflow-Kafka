@@ -18,8 +18,8 @@ def run_producer():
     )
 
     # Fetch matches using your API key and ingestion logic
-    # raw_data = ems([2023, 2024, 2025, 2026])
-    raw_data = ems([2023, 2024, 2025])
+    raw_data = ems([2023, 2024, 2025, 2026])
+    # raw_data = ems([2023, 2024, 2025])
 
     # Extract all individual matches dynamically from any nesting structure
     matches_list = []

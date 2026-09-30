@@ -3,7 +3,12 @@
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import col, current_timestamp
 
-from football_etl.config import KAFKA_BOOTSTRAP_SERVERS, KAFKA_TOPIC, BRONZE_PATH, BRONZE_CHECKPOINT
+from football_etl.config import (
+    KAFKA_BOOTSTRAP_SERVERS,
+    KAFKA_TOPIC_MATCHES,
+    BRONZE_PATH,
+    BRONZE_CHECKPOINT,
+)
 
 spark = (
     SparkSession.builder.appName("bronze_ingest")
@@ -15,7 +20,7 @@ spark = (
 raw_df = (
     spark.readStream.format("kafka")
     .option("kafka.bootstrap.servers", KAFKA_BOOTSTRAP_SERVERS)
-    .option("subscribe", KAFKA_TOPIC)
+    .option("subscribe", KAFKA_TOPIC_MATCHES)
     .option("startingOffsets", "earliest")
     .option("failOnDataLoss", "false")
     .load()

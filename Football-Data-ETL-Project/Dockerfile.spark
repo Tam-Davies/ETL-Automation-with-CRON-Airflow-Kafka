@@ -1,0 +1,7 @@
+FROM apache/spark:3.5.0
+
+USER root
+
+RUN mkdir -p /opt/src /opt/data
+
+USER 185
