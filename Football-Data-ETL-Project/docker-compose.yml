@@ -1,3 +1,5 @@
+version: '3.8'
+
 services:
   kafka:
     image: confluentinc/cp-kafka:7.6.0
@@ -24,64 +26,57 @@ services:
 
   postgres:
     image: timescale/timescaledb:latest-pg16
-    ports: ["5432:5432"]
+    ports:
+      - "5432:5432"
     environment:
-      POSTGRES_DB: football_db
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: Kickboxing12#
+      POSTGRES_DB: football_db
     volumes:
       - pg_data:/var/lib/postgresql/data
-      - ./configs/postgres_schemas.sql:/docker-entrypoint-initdb.d/init.sql
 
   spark-master:
     image: apache/spark:3.5.0
-    environment:
-      SPARK_MODE: master
-    entrypoint: ["/opt/spark/sbin/start-master.sh"]
-    ports: ["8080:8080", "7077:7077"]
+    command: ["/opt/spark/bin/spark-class", "org.apache.spark.deploy.master.Master"]
+    ports:
+      - "8080:8080"
+      - "7077:7077"
     volumes:
       - ./src:/opt/src
       - ./data:/opt/data
 
   spark-worker:
     image: apache/spark:3.5.0
-    depends_on: [spark-master]
-    entrypoint: ["/opt/spark/sbin/start-worker.sh", "spark://spark-master:7077"]
+    depends_on:
+      - spark-master
+    command: ["/opt/spark/bin/spark-class", "org.apache.spark.deploy.worker.Worker", "spark://spark-master:7077"]
     volumes:
       - ./src:/opt/src
       - ./data:/opt/data
 
   airflow:
-    image: apache/airflow:2.9.1
-    depends_on: [postgres]
-    ports: ["8081:8080"]
+    build:
+      context: .
+      dockerfile: Dockerfile.airflow
+    ports:
+      - "8081:8080"
     environment:
-      AIRFLOW__CORE__EXECUTOR: LocalExecutor
-      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://spark:spark_pw@postgres/matches
+      - AIRFLOW__CORE__EXECUTOR=SequentialExecutor
+      - AIRFLOW__DATABASE__SQL_ALCHEMY_CONN=postgresql+psycopg2://postgres:Kickboxing12#@postgres:5432/football_db
+    command: standalone
     volumes:
       - ./airflow/dags:/opt/airflow/dags
-      - ./src:/opt/src
-    command: standalone
+      - ./src:/opt/airflow/src
 
   grafana:
     image: grafana/grafana:latest
-    depends_on: [postgres]
-    ports: ["3000:3000"]
-    environment:
-      GF_SECURITY_ADMIN_PASSWORD: admin
+    ports:
+      - "3000:3000"
 
   producer:
     build:
       context: .
       dockerfile: Dockerfile.producer
-    environment:
-      PYTHONPATH: /opt/src
-      KAFKA_BOOTSTRAP_SERVERS: kafka:9092
-    env_file:
-      - .env
-    volumes:
-      - ./src:/opt/src
-    command: python -m football_etl.kafka_producer
     depends_on:
       kafka:
         condition: service_healthy

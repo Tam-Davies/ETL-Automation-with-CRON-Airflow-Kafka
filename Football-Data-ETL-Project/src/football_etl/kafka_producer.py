@@ -20,23 +20,36 @@ def run_producer():
     # Fetch matches using your API key and ingestion logic
     raw_data = ems([2023, 2024, 2025, 2026])
 
-    # Flatten and extract matches properly from the API payload structure
+    # Extract all individual matches dynamically from any nesting structure
     matches_list = []
+    
+    def extract_matches(data):
+        if isinstance(data, list):
+            for item in data:
+                extract_matches(item)
+        elif isinstance(data, dict):
+            # If this dictionary contains a 'matches' key which is a list, grab it
+            if "matches" in data and isinstance(data["matches"], list):
+                matches_list.extend(data["matches"])
+            else:
+                # Otherwise, check all values in the dictionary
+                for val in data.values():
+                    if isinstance(val, (list, dict)):
+                        extract_matches(val)
+
     if isinstance(raw_data, pd.DataFrame):
         matches_list = raw_data.to_dict(orient="records")
-    elif isinstance(raw_data, list):
-        for item in raw_data:
-            if isinstance(item, dict) and "matches" in item:
-                matches_list.extend(item["matches"])
-            else:
-                matches_list.append(item)
-    elif isinstance(raw_data, dict):
-        matches_list = raw_data.get("matches", [raw_data])
+    elif isinstance(raw_data, (list, dict)):
+        extract_matches(raw_data)
+        # Fallback: if no nested 'matches' key was found, treat the raw_data itself as items
+        if not matches_list and isinstance(raw_data, list):
+            matches_list = raw_data
+        elif not matches_list and isinstance(raw_data, dict):
+            matches_list = [raw_data]
 
     print(f"--- PRODUCER: Starting transmission of {len(matches_list)} matches ---")
 
     for match in matches_list:
-        # Handle different API response field naming conventions safely
         match_id = match.get('id') or match.get('match_id', 'N/A')
         home_team = match.get('homeTeam', {}).get('name') or match.get('home_team', 'Home')
         away_team = match.get('awayTeam', {}).get('name') or match.get('away_team', 'Away')

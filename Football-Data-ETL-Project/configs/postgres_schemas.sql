@@ -18,6 +18,7 @@ CREATE TABLE IF NOT EXISTS silver.match_events (
     outcome          TEXT
 );
 
+
 SELECT create_hypertable('silver.match_events', 'date', if_not_exists => TRUE);
 
 CREATE INDEX IF NOT EXISTS idx_match_events_match_id ON silver.match_events (match_id, date DESC);
@@ -31,6 +32,7 @@ CREATE TABLE IF NOT EXISTS gold.match_summary (
     avg_total_goals      DOUBLE PRECISION,
     avg_goal_difference  DOUBLE PRECISION
 );
+
 
 CREATE ROLE grafana_reader LOGIN PASSWORD 'change_me';
 GRANT USAGE ON SCHEMA silver TO grafana_reader;
