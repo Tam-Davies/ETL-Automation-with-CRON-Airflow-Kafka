@@ -46,6 +46,8 @@ services:
     ports:
       - "8080:8080"
       - "7077:7077"
+    env_file:
+      - .env
     environment:
       PYTHONPATH: /opt/src
     volumes:
@@ -63,6 +65,8 @@ services:
       - /opt/spark/bin/spark-class
       - org.apache.spark.deploy.worker.Worker
       - spark://spark-master:7077
+    env_file:
+      - .env
     environment:
       PYTHONPATH: /opt/src
     volumes:
