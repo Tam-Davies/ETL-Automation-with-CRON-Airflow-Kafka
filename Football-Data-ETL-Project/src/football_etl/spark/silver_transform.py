@@ -113,7 +113,6 @@ parsed_df = (
         col("parsed.score.fullTime.away").alias("away_score"),
     )
     .filter(col("match_id").isNotNull())
-    .dropDuplicates(["match_id", "date"])
 )
 
 
