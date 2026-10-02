@@ -16,7 +16,7 @@ with DAG(
 
     run_gold_job = SparkSubmitOperator(
         task_id="run_gold_aggregate",
-        application="/opt/src/football_etl/spark/gold_aggregate.py",
+        application="/opt/airflow/src/football_etl/spark/gold_aggregate.py",
         conn_id="spark_default",
         packages="org.postgresql:postgresql:42.7.3",
         verbose=True,
