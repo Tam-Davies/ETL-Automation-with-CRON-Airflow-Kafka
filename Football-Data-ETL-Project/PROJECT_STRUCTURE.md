@@ -62,3 +62,14 @@ ingestion.py --(API)--> producer.py --(Kafka: matches.raw)-->
     spark/silver_transform.py --(uses loading.py)--> Postgres silver --> Grafana
     spark/gold_aggregate.py (Airflow, batch) --(uses loading.py)--> Postgres gold --> Power BI
 ```
+
+## Gold schema migration
+
+New Postgres volumes run the numbered scripts in `configs/migrations/` after
+`configs/postgres_schemas.sql`. To migrate an existing volume, run the
+idempotent migration explicitly:
+
+```sh
+docker compose exec -T postgres psql -U postgres -d football_db \
+  -v ON_ERROR_STOP=1 < configs/migrations/002_gold_match_summary.sql
+```

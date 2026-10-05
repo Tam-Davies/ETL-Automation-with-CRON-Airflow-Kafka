@@ -9,7 +9,11 @@ def write_append(df, table: str):
 
 
 def write_overwrite(df, table: str):
-    df.write.mode("overwrite").jdbc(url=PG_URL, table=table, properties=PG_PROPS)
+    (
+        df.write.mode("overwrite")
+        .option("truncate", "true")
+        .jdbc(url=PG_URL, table=table, properties=PG_PROPS)
+    )
 
 
 def read_table(spark, table: str):

@@ -24,12 +24,13 @@ SELECT create_hypertable('silver.match_events', 'date', if_not_exists => TRUE);
 CREATE INDEX IF NOT EXISTS idx_match_events_match_id ON silver.match_events (match_id, date DESC);
 
 CREATE TABLE IF NOT EXISTS gold.match_summary (
-    home_team           TEXT PRIMARY KEY,
+    team                 TEXT PRIMARY KEY,
     matches_played       INTEGER,
-    home_wins            INTEGER,
-    home_losses          INTEGER,
-    draws                INTEGER,
-    avg_total_goals      DOUBLE PRECISION,
+    total_wins           INTEGER,
+    total_losses         INTEGER,
+    total_draws          INTEGER,
+    total_points         INTEGER,
+    avg_match_goals      DOUBLE PRECISION,
     avg_goal_difference  DOUBLE PRECISION
 );
 
