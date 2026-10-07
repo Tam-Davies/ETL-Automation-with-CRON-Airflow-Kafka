@@ -119,8 +119,6 @@ services:
       - .env
     environment:
       PYTHONPATH: /opt/src
-      SPARK_WORKER_CORES: 1
-      SPARK_WORKER_MEMORY: 1g
     volumes:
       - ./src:/opt/src
       - ./data:/opt/data
@@ -142,7 +140,7 @@ services:
     environment:
       AIRFLOW__CORE__EXECUTOR: SequentialExecutor
       AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://postgres:${DB_PASSWORD}@postgres:5432/football_db
-      AIRFLOW_CONN_SPARK_DEFAULT: spark://spark-master:7077
+      # AIRFLOW_CONN_SPARK_DEFAULT: spark://spark-master:7077
       PG_URL: ${PG_URL:-jdbc:postgresql://postgres:5432/football_db}
       PG_USER: ${PG_USER:-postgres}
       PG_PASSWORD: ${PG_PASSWORD:-${DB_PASSWORD}}
@@ -171,7 +169,7 @@ services:
     environment:
       AIRFLOW__CORE__EXECUTOR: SequentialExecutor
       AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://postgres:${DB_PASSWORD}@postgres:5432/football_db
-      AIRFLOW__WEBSERVER__WORKERS: 1
+      AIRFLOW__WEBSERVER__WORKERS: 2
     command: webserver
     volumes:
       - ./airflow/dags:/opt/airflow/dags

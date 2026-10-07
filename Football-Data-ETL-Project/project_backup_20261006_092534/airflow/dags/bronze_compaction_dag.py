@@ -18,16 +18,11 @@ with DAG(
     catchup=False,
     tags=["bronze", "maintenance"],
 ) as dag:
+
     compact_bronze = SparkSubmitOperator(
         task_id="optimize_and_vacuum_bronze",
         application="/opt/src/football_etl/spark/run_sql.py",
         application_args=[COMPACTION_SQL],
         conn_id="spark_default",
-        packages="io.delta:delta-spark_2.12:3.2.0",
-        conf={
-            "spark.driver.memory": "384m",
-            "spark.executor.memory": "384m",
-            "spark.executor.cores": "1",
-        },
         verbose=True,
     )

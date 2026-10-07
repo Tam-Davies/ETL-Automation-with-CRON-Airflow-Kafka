@@ -13,15 +13,11 @@ with DAG(
     catchup=False,
     tags=["gold", "batch"],
 ) as dag:
+
     run_gold_job = SparkSubmitOperator(
         task_id="run_gold_aggregate",
         application="/opt/src/football_etl/spark/gold_aggregate.py",
         conn_id="spark_default",
         packages="org.postgresql:postgresql:42.7.3",
-        conf={
-            "spark.driver.memory": "384m",
-            "spark.executor.memory": "384m",
-            "spark.executor.cores": "1",
-        },
         verbose=True,
     )

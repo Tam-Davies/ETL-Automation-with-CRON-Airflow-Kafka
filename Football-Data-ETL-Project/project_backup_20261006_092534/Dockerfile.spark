@@ -1,0 +1,9 @@
+FROM apache/spark:3.5.0
+
+USER root
+
+RUN pip install --no-cache-dir python-dotenv==1.0.1 \
+    && mkdir -p /opt/src /opt/data /home/spark/.ivy2/cache \
+    && chown -R 185:185 /opt/src /opt/data /home/spark/.ivy2
+
+USER 185
